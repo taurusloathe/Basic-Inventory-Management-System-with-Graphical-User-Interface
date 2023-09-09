@@ -1,0 +1,94 @@
+import tkinter as tk
+
+class UniqueInventory:
+    def __init__(self):
+        self.products = {}
+
+    def add_product(self, name, price, quantity):
+        self.products[name] = {'price': price, 'quantity': quantity, 'location': 'Shelf A'}
+
+    def update_location(self, name, new_location):
+        if name in self.products:
+            self.products[name]['location'] = new_location
+        else:
+            return f"Product '{name}' not found in inventory."
+
+    def display_inventory(self):
+        inventory_str = "Current Inventory:\n"
+        for product, details in self.products.items():
+            inventory_str += f"Product: {product}, Price: ${details['price']}, Quantity: {details['quantity']}, Location: {details['location']}\n"
+        return inventory_str
+
+    def calculate_total_value(self):
+        total_value = 0
+        for product, details in self.products.items():
+            total_value += details['price'] * details['quantity']
+        return total_value
+
+def add_product():
+    name = name_entry.get()
+    price = float(price_entry.get())
+    quantity = int(quantity_entry.get())
+    inventory.add_product(name, price, quantity)
+
+def update_location():
+    name = name_entry.get()
+    new_location = location_entry.get()
+    result = inventory.update_location(name, new_location)
+    display_text.delete(1.0, tk.END)
+    display_text.insert(tk.END, result)
+
+def display_inventory():
+    display_text.delete(1.0, tk.END)
+    display_text.insert(tk.END, inventory.display_inventory())
+
+def calculate_total_value():
+    total_value = inventory.calculate_total_value()
+    display_text.delete(1.0, tk.END)
+    display_text.insert(tk.END, f'Total Inventory Value: ${total_value}')
+
+# Create a GUI window
+root = tk.Tk()
+root.title("Inventory Management")
+
+# Create an instance of the inventory
+inventory = UniqueInventory()
+
+# Create labels, entry fields, and buttons
+name_label = tk.Label(root, text="Product Name:")
+name_label.pack()
+name_entry = tk.Entry(root)
+name_entry.pack()
+
+price_label = tk.Label(root, text="Price:")
+price_label.pack()
+price_entry = tk.Entry(root)
+price_entry.pack()
+
+quantity_label = tk.Label(root, text="Quantity:")
+quantity_label.pack()
+quantity_entry = tk.Entry(root)
+quantity_entry.pack()
+
+location_label = tk.Label(root, text="New Location:")
+location_label.pack()
+location_entry = tk.Entry(root)
+location_entry.pack()
+
+add_button = tk.Button(root, text="Add Product", command=add_product)
+add_button.pack()
+
+update_button = tk.Button(root, text="Update Location", command=update_location)
+update_button.pack()
+
+display_button = tk.Button(root, text="Display Inventory", command=display_inventory)
+display_button.pack()
+
+calculate_button = tk.Button(root, text="Calculate Total Value", command=calculate_total_value)
+calculate_button.pack()
+
+display_text = tk.Text(root, height=10, width=40)
+display_text.pack()
+
+# Start the GUI main loop
+root.mainloop()
